@@ -1,209 +1,115 @@
-# DecisionTree_BreastCancer
+# Decision Tree Breast Cancer Classification
 
-Decision Tree classification pipeline for the Wisconsin Diagnostic Breast Cancer dataset. This project compares Gini and entropy splitting criteria, explores tree-depth tuning, evaluates train/test split behavior, and renders the notebook output through GitHub Pages.
+## Overview
 
-## Project Overview
+Decision Tree Breast Cancer Classification is a beginner-friendly machine learning project focused on using a decision tree model to classify breast cancer tumors as benign or malignant.
 
-This repository demonstrates a supervised machine learning workflow for binary tumor classification:
+The goal of this project is not just to train a model, but to understand the full process behind a basic classification workflow. The notebook walks through loading the data, preparing it for modeling, training decision tree classifiers, comparing model settings, and evaluating how well the model performs.
 
-- **Input:** Wisconsin Diagnostic Breast Cancer measurements
-- **Target:** `diagnosis`
-  - `0` = Benign
-  - `1` = Malignant
-- **Model:** `DecisionTreeClassifier` from scikit-learn
-- **Main goals:**
-  - Train an interpretable decision tree classifier
-  - Compare Gini impurity vs. entropy
-  - Evaluate precision, recall, F1-score, and accuracy
-  - Study how `max_depth` affects bias and variance
-  - Test how different train/test split sizes affect generalization
+This project is a practical introduction to supervised machine learning using Python and scikit-learn.
 
-## Repository Contents
+## Why This Project Exists
 
-```text
-.
-├── DecisionTree_BreastCancer.ipynb   # Main notebook with model training, evaluation, and plots
-├── index.html                        # Rendered notebook output for GitHub Pages
-└── README.md                         # Project documentation
-```
+This project was created to practice one of the most important beginner concepts in machine learning: classification.
 
-## Dataset
+A decision tree is a useful first model because it is easier to understand than many other algorithms. Instead of acting like a black box, a decision tree makes predictions by splitting data based on feature values. This makes it a strong starting point for learning how models make decisions.
 
-The notebook uses the **Wisconsin Diagnostic Breast Cancer** dataset format, loaded from `wdbc.data`.
+Through this project, I practiced:
 
-Each observation includes:
+- Loading and preparing a classification dataset
+- Splitting data into training and testing sets
+- Training a Decision Tree Classifier
+- Comparing Gini impurity and entropy criteria
+- Tuning tree depth to manage overfitting
+- Evaluating model performance with accuracy, precision, recall, and F1-score
+- Interpreting the tradeoffs between false positives and false negatives
 
-- An ID column
-- A diagnosis label
-- 30 numerical features describing cell nuclei characteristics
+## Project Workflow
 
-Feature groups include mean, standard error, and worst-value measurements for:
+The notebook follows a structured machine learning workflow.
 
-- Radius
-- Texture
-- Perimeter
-- Area
-- Smoothness
-- Compactness
-- Concavity
-- Concave points
-- Symmetry
-- Fractal dimension
+### 1. Setup and Data Loading
 
-## Methodology
+The project begins by importing the required Python libraries and loading the breast cancer dataset. This step establishes the features used by the model and the target variable the model is trying to predict.
 
-### 1. Data Loading and Preprocessing
+### 2. Data Preparation
 
-The dataset is loaded with `pandas`, assigned explicit column names, and split into:
+The data is separated into input features and target labels. The dataset is then split into training and testing sets so the model can be evaluated on data it has not already seen.
 
-- `X`: numeric predictor features
-- `y`: binary diagnosis target
+### 3. Model Training
 
-The diagnosis values are mapped as:
+A decision tree classifier is trained to predict whether a tumor is benign or malignant. The project explores how different tree settings affect the model's behavior and performance.
 
-```python
-{'B': 0, 'M': 1}
-```
+### 4. Model Evaluation
 
-### 2. Exploratory Visualization
+The trained model is evaluated using classification metrics. These metrics help explain not only how often the model is correct, but also how well it performs for each class.
 
-The notebook includes histogram visualizations for selected features such as:
+This is especially important in a medical dataset, where missing a malignant tumor can be more serious than incorrectly flagging a benign one.
 
-- `radius_mean`
-- `texture_mean`
+### 5. Model Comparison and Tuning
 
-These plots help show distributional differences between benign and malignant cases.
+The notebook compares different decision tree configurations, including Gini impurity and entropy. It also tests different tree depths to better understand the balance between a model that is too simple and one that overfits the training data.
 
-### 3. Gini Decision Tree
+## Tools Used
 
-A default decision tree using the Gini criterion is trained and evaluated.
-
-**Observed performance:**
-
-| Class | Precision | Recall | F1-score |
-|---|---:|---:|---:|
-| Benign | 0.97 | 0.95 | 0.96 |
-| Malignant | 0.90 | 0.94 | 0.92 |
-
-Overall accuracy: **94%**
-
-The Gini tree provided the stronger overall precision-recall balance.
-
-### 4. Entropy Decision Tree
-
-A second decision tree is trained using the entropy criterion.
-
-**Observed performance:**
-
-| Class | Precision | Recall | F1-score |
-|---|---:|---:|---:|
-| Benign | 0.97 | 0.90 | 0.94 |
-| Malignant | 0.84 | 0.95 | 0.89 |
-
-Overall accuracy: **92%**
-
-The entropy model produced slightly higher malignant recall but lower malignant precision, meaning it caught more malignant cases while increasing false positives.
-
-### 5. Tree Depth Tuning
-
-The notebook evaluates multiple `max_depth` values to study model complexity.
-
-| max_depth | Accuracy | Precision | Recall | F1-score |
-|---:|---:|---:|---:|---:|
-| 3 | 0.9404 | 0.9175 | 0.9082 | 0.9128 |
-| 5 | 0.9263 | 0.8667 | 0.9286 | 0.8966 |
-| 7 | 0.9193 | 0.8378 | 0.9490 | 0.8900 |
-
-Key finding:
-
-- `max_depth=3` gives the best accuracy and F1-score.
-- `max_depth=5` improves malignant recall and is used as a balanced default.
-- `max_depth=7` maximizes recall but increases false positives.
-
-### 6. Train/Test Split Experiment
-
-Using `max_depth=5`, the notebook tests different training-set sizes.
-
-| Train % | Train Samples | Test Samples | Train Accuracy | Test Accuracy |
-|---:|---:|---:|---:|---:|
-| 20% | 113 | 456 | 1.0000 | 0.8969 |
-| 30% | 170 | 399 | 1.0000 | 0.9098 |
-| 40% | 227 | 342 | 1.0000 | 0.9298 |
-| 50% | 284 | 285 | 0.9859 | 0.9263 |
-| 60% | 341 | 228 | 0.9912 | 0.9605 |
-| 70% | 398 | 171 | 0.9925 | 0.9532 |
-| 80% | 455 | 114 | 0.9934 | 0.9474 |
-
-Best observed split: **60% train / 40% test**
-
-Test accuracy at this split: **96.05%**
-
-## Key Results
-
-- The **Gini** criterion achieved the best overall accuracy in the initial model comparison.
-- The **Entropy** criterion improved malignant recall but reduced precision.
-- Shallower trees reduced overfitting and gave stronger generalization.
-- `max_depth=5` was selected as a practical trade-off between recall and precision.
-- A **60/40 train/test split** produced the highest test accuracy in the split experiment.
-
-## Technologies Used
+This project uses common Python machine learning tools:
 
 - Python
+- Jupyter Notebook
 - pandas
 - NumPy
 - Matplotlib
+- Seaborn
 - scikit-learn
-- Jupyter Notebook
-- GitHub Pages
 
-## How to Run
+## Getting Started
 
-1. Clone the repository:
+Clone the repository:
 
-```bash
-git clone https://github.com/frankstop/DecisionTree_BreastCancer.git
-cd DecisionTree_BreastCancer
-```
+    git clone https://github.com/frankstop/DecisionTree_BreastCancer.git
+    cd DecisionTree_BreastCancer
 
-2. Install dependencies:
+Install the main dependencies:
 
-```bash
-pip install pandas numpy matplotlib scikit-learn jupyter
-```
+    pip install pandas numpy matplotlib seaborn scikit-learn jupyter
 
-3. Add the dataset file if it is not already present:
+Open the notebook:
 
-```text
-wdbc.data
-```
+    jupyter notebook
 
-4. Launch Jupyter Notebook:
+Then open the project notebook.
 
-```bash
-jupyter notebook DecisionTree_BreastCancer.ipynb
-```
+You can also open the exported HTML file in a browser to view the notebook without running the code.
 
-5. Run all cells from top to bottom.
+## Who This Project Is For
 
-## GitHub Pages
+This project is best suited for:
 
-The rendered notebook is available through GitHub Pages:
+- Beginners learning machine learning
+- Students practicing classification models
+- Anyone learning how decision trees work
+- Portfolio reviewers who want to see a structured modeling workflow
+- Learners who want practice interpreting model evaluation metrics
 
-```text
-https://frankstop.github.io/DecisionTree_BreastCancer/
-```
+## What I Practiced
+
+Through this project, I practiced building a supervised machine learning model from start to finish. I worked with a real classification dataset, trained decision tree models, compared different splitting criteria, and evaluated performance using metrics that go beyond simple accuracy.
+
+The project helped reinforce how model settings affect results and why evaluation should consider both overall performance and class-specific behavior.
 
 ## Future Improvements
 
-Potential next steps include:
+Possible next steps for this project include:
 
-- Add k-fold cross-validation
-- Add cost-complexity pruning
-- Evaluate ROC AUC and confusion matrices
-- Add feature importance visualizations
-- Compare against Random Forest and Gradient Boosting models
-- Package the workflow into reusable Python scripts
+- Adding a requirements.txt file
+- Adding more markdown explanations throughout the notebook
+- Using cross-validation for more reliable model evaluation
+- Visualizing feature importance
+- Adding ROC AUC analysis
+- Testing pruning or cost-complexity regularization
+- Comparing the decision tree against Random Forest or Gradient Boosting models
+- Creating a short final summary of key findings
 
-## License
+## Author
 
-No license file is currently included. Add a license if you intend others to reuse, modify, or distribute this project.
+Created by [frankstop](https://github.com/frankstop)
